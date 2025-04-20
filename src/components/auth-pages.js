@@ -1,9 +1,39 @@
-import { Link } from "react-router";
+import axios, { AxiosError } from "axios";
+import { Link, useNavigate } from "react-router";
 
 export function LoginPage() {
+  const navigate = useNavigate();
+
   return (
     <div>
-      <form>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const loginData = new FormData(e.currentTarget);
+          try {
+            await axios.post(
+              `${process.env.REACT_APP_API_URL}/auth/login`,
+              Object.fromEntries(loginData),
+              { withCredentials: true },
+            );
+
+            navigate("/game");
+          } catch (err) {
+            if (err instanceof AxiosError) {
+              if (err.status === 500) {
+                console.error(err);
+                alert("something went wrong");
+                return;
+              }
+
+              alert(err.response.data.message);
+              return;
+            }
+
+            alert("something went wrong");
+          }
+        }}
+      >
         <label>
           Username: <input type="text" name="username" id="username" />
         </label>
@@ -18,9 +48,37 @@ export function LoginPage() {
 }
 
 export function RegisterPage() {
+  const navigate = useNavigate();
+
   return (
     <div>
-      <form>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const registerData = new FormData(e.currentTarget);
+          try {
+            await axios.post(
+              `${process.env.REACT_APP_API_URL}/auth/register`,
+              Object.fromEntries(registerData),
+            );
+
+            navigate("/");
+          } catch (err) {
+            if (err instanceof AxiosError) {
+              if (err.status === 500) {
+                console.error(err);
+                alert("something went wrong");
+                return;
+              }
+
+              alert(err.response.data.message);
+              return;
+            }
+
+            alert("something went wrong");
+          }
+        }}
+      >
         <label>
           Username: <input type="text" name="username" id="username" />
         </label>
@@ -29,11 +87,7 @@ export function RegisterPage() {
         </label>
         <label>
           Confirm password:{" "}
-          <input
-            type="confirmPassword"
-            name="confirmPassword"
-            id="confirmPassword"
-          />
+          <input type="password" name="confirmPassword" id="confirmPassword" />
         </label>
         <button type="submit">Register</button>
       </form>

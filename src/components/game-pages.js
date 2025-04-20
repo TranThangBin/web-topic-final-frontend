@@ -1,8 +1,39 @@
-import { useState } from "react";
-import { useParams } from "react-router";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
 export function GameHomePage() {
+  const navigate = useNavigate();
   const [games, setGames] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/game/all`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setGames(res.data);
+      })
+      .catch((err) => {
+        if (err instanceof AxiosError) {
+          if (err.status === 500) {
+            console.error(err);
+            alert("something went wrong");
+            return;
+          }
+
+          alert(err.response.data.message);
+
+          if (err.status === 401) {
+            navigate("/");
+          }
+
+          return;
+        }
+
+        alert("something went wrong");
+      });
+  }, []);
 
   return (
     <div>
