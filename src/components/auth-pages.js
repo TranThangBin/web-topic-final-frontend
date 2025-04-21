@@ -1,37 +1,40 @@
 import axios, { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router";
 
+function handleError(err) {
+  if (err instanceof AxiosError) {
+    if (err.status === 500) {
+      console.error(err);
+      alert("something went wrong");
+      return;
+    }
+
+    alert(err.response.data.message);
+    return;
+  }
+
+  alert("something went wrong");
+}
+
 export function LoginPage() {
   const navigate = useNavigate();
 
   return (
     <div>
       <form
-        onSubmit={async (e) => {
+        onSubmit={(e) => {
           e.preventDefault();
           const loginData = new FormData(e.currentTarget);
-          try {
-            await axios.post(
+          axios
+            .post(
               `${process.env.REACT_APP_API_URL}/auth/login`,
               Object.fromEntries(loginData),
               { withCredentials: true },
-            );
-
-            navigate("/game");
-          } catch (err) {
-            if (err instanceof AxiosError) {
-              if (err.status === 500) {
-                console.error(err);
-                alert("something went wrong");
-                return;
-              }
-
-              alert(err.response.data.message);
-              return;
-            }
-
-            alert("something went wrong");
-          }
+            )
+            .then(() => {
+              navigate("/game");
+            })
+            .catch(handleError);
         }}
       >
         <label>
@@ -56,27 +59,15 @@ export function RegisterPage() {
         onSubmit={async (e) => {
           e.preventDefault();
           const registerData = new FormData(e.currentTarget);
-          try {
-            await axios.post(
+          await axios
+            .post(
               `${process.env.REACT_APP_API_URL}/auth/register`,
               Object.fromEntries(registerData),
-            );
-
-            navigate("/");
-          } catch (err) {
-            if (err instanceof AxiosError) {
-              if (err.status === 500) {
-                console.error(err);
-                alert("something went wrong");
-                return;
-              }
-
-              alert(err.response.data.message);
-              return;
-            }
-
-            alert("something went wrong");
-          }
+            )
+            .then(() => {
+              navigate("/");
+            })
+            .catch(handleError);
         }}
       >
         <label>
