@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router";
 import Gopher from "../assets/square-gopher.png";
 import GopherAndGame from "../assets/gopherandgame.png";
+import { Background } from "./share";
 
 function handleError(err) {
 	if (err instanceof AxiosError) {
@@ -16,12 +17,6 @@ function handleError(err) {
 	}
 
 	alert("something went wrong");
-}
-
-function Background() {
-	return (
-		<div className="tw:absolute tw:-z-10 tw:bg-[url('/public/images/stars.png')] tw:min-h-screen tw:min-w-screen tw:opacity-20"></div>
-	);
 }
 
 export function LoginPage() {
@@ -103,9 +98,9 @@ export function RegisterPage() {
 		<>
 			<Background />
 			<div className="tw:min-h-screen tw:grid tw:place-items-center">
-				<div className="tw:grid tw:grid-cols-2 tw:border-2 tw:border-black tw:mx-8 tw:min-h-1/2 tw:bg-white">
+				<div className="tw:grid tw:grid-cols-[auto_1fr] tw:border-2 tw:border-black tw:mx-8 tw:min-h-1/2 tw:bg-white">
 					<img
-						className="tw:min-h-full"
+						className="tw:min-h-full tw:max-w-2xl"
 						src={GopherAndGame}
 						alt="Go gopher"
 					/>
