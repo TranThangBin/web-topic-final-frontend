@@ -8,10 +8,7 @@
     --tw-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --tw-color-red-400: oklch(70.4% 0.191 22.216);
-    --tw-color-yellow-200: oklch(94.5% 0.129 101.54);
     --tw-color-yellow-400: oklch(85.2% 0.199 91.936);
-    --tw-color-yellow-500: oklch(79.5% 0.184 86.047);
-    --tw-color-yellow-700: oklch(55.4% 0.135 66.442);
     --tw-color-green-400: oklch(79.2% 0.209 151.711);
     --tw-color-blue-400: oklch(70.7% 0.165 254.624);
     --tw-color-gray-200: oklch(92.8% 0.006 264.531);
@@ -32,7 +29,6 @@
     --tw-text-5xl: 3rem;
     --tw-text-5xl--line-height: 1;
     --tw-font-weight-medium: 500;
-    --tw-font-weight-semibold: 600;
     --tw-font-weight-bold: 700;
     --tw-aspect-video: 16 / 9;
     --tw-default-font-family: var(--tw-font-sans);
@@ -221,9 +217,6 @@
   .tw\:aspect-square {
     aspect-ratio: 1 / 1;
   }
-  .tw\:aspect-video {
-    aspect-ratio: var(--tw-aspect-video);
-  }
   .tw\:h-1 {
     height: calc(var(--tw-spacing) * 1);
   }
@@ -235,9 +228,6 @@
   }
   .tw\:min-h-96 {
     min-height: calc(var(--tw-spacing) * 96);
-  }
-  .tw\:min-h-\[calc\(1vh-3\.75rem\)\] {
-    min-height: calc(1vh - 3.75rem);
   }
   .tw\:min-h-\[calc\(100vh-3\.75rem\)\] {
     min-height: calc(100vh - 3.75rem);
@@ -251,77 +241,14 @@
   .tw\:w-1 {
     width: calc(var(--tw-spacing) * 1);
   }
-  .tw\:w-80 {
-    width: calc(var(--tw-spacing) * 80);
-  }
   .tw\:w-full {
     width: 100%;
   }
   .tw\:w-lg {
     width: var(--tw-container-lg);
   }
-  .tw\:w-xl {
-    width: var(--tw-container-xl);
-  }
-  .tw\:max-w-1 {
-    max-width: calc(var(--tw-spacing) * 1);
-  }
-  .tw\:max-w-1\/2 {
-    max-width: calc(1/2 * 100%);
-  }
   .tw\:max-w-2xl {
     max-width: var(--tw-container-2xl);
-  }
-  .tw\:max-w-3xl {
-    max-width: var(--tw-container-3xl);
-  }
-  .tw\:max-w-80 {
-    max-width: calc(var(--tw-spacing) * 80);
-  }
-  .tw\:max-w-96 {
-    max-width: calc(var(--tw-spacing) * 96);
-  }
-  .tw\:max-w-\[max\(48rem\,50\%\)\] {
-    max-width: max(48rem, 50%);
-  }
-  .tw\:max-w-\[min\(48rem\)\] {
-    max-width: min(48rem);
-  }
-  .tw\:max-w-\[min\(48rem\,10\%\)\] {
-    max-width: min(48rem, 10%);
-  }
-  .tw\:max-w-\[min\(48rem\,50\%\)\] {
-    max-width: min(48rem, 50%);
-  }
-  .tw\:max-w-\[minmax\(48rem\)\] {
-    max-width: minmax(48rem);
-  }
-  .tw\:max-w-\[minmax\(48rem\,50\%\)\] {
-    max-width: minmax(48rem,50%);
-  }
-  .tw\:max-w-xl {
-    max-width: var(--tw-container-xl);
-  }
-  .tw\:min-w-1 {
-    min-width: calc(var(--tw-spacing) * 1);
-  }
-  .tw\:min-w-1\/2 {
-    min-width: calc(1/2 * 100%);
-  }
-  .tw\:min-w-1\/3 {
-    min-width: calc(1/3 * 100%);
-  }
-  .tw\:min-w-1\/4 {
-    min-width: calc(1/4 * 100%);
-  }
-  .tw\:min-w-80 {
-    min-width: calc(var(--tw-spacing) * 80);
-  }
-  .tw\:min-w-96 {
-    min-width: calc(var(--tw-spacing) * 96);
-  }
-  .tw\:min-w-full {
-    min-width: 100%;
   }
   .tw\:min-w-screen {
     min-width: 100vw;
@@ -343,41 +270,8 @@
   .tw\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .tw\:grid-cols-\[1fr_20rem\] {
-    grid-template-columns: 1fr 20rem;
-  }
-  .tw\:grid-cols-\[30\%_1fr\] {
-    grid-template-columns: 30% 1fr;
-  }
-  .tw\:grid-cols-\[30\%_30\%\] {
-    grid-template-columns: 30% 30%;
-  }
-  .tw\:grid-cols-\[40\%_40\%\] {
-    grid-template-columns: 40% 40%;
-  }
-  .tw\:grid-cols-\[40\%_auto\] {
-    grid-template-columns: 40% auto;
-  }
   .tw\:grid-cols-\[auto_1fr\] {
     grid-template-columns: auto 1fr;
-  }
-  .tw\:grid-cols-\[auto_20\%\] {
-    grid-template-columns: auto 20%;
-  }
-  .tw\:grid-cols-\[auto_20rem\] {
-    grid-template-columns: auto 20rem;
-  }
-  .tw\:grid-cols-\[auto_30\%\] {
-    grid-template-columns: auto 30%;
-  }
-  .tw\:grid-cols-\[auto_40rem\] {
-    grid-template-columns: auto 40rem;
-  }
-  .tw\:grid-cols-\[min\(48rem\,1fr\)_1fr\] {
-    grid-template-columns: min(48rem, 1fr) 1fr;
-  }
-  .tw\:grid-cols-\[min\(48rem\,30\%\)_1fr\] {
-    grid-template-columns: min(48rem, 30%) 1fr;
   }
   .tw\:grid-cols-\[repeat\(auto-fill\,minmax\(20rem\,1fr\)\)\] {
     grid-template-columns: repeat(auto-fill,minmax(20rem,1fr));
@@ -396,9 +290,6 @@
   }
   .tw\:items-center {
     align-items: center;
-  }
-  .tw\:justify-center {
-    justify-content: center;
   }
   .tw\:justify-end {
     justify-content: flex-end;
@@ -429,15 +320,6 @@
   }
   .tw\:border-gray-400 {
     border-color: var(--tw-color-gray-400);
-  }
-  .tw\:border-gray-500 {
-    border-color: var(--tw-color-gray-500);
-  }
-  .tw\:border-gray-700 {
-    border-color: var(--tw-color-gray-700);
-  }
-  .tw\:border-white {
-    border-color: var(--tw-color-white);
   }
   .tw\:bg-black {
     background-color: var(--tw-color-black);

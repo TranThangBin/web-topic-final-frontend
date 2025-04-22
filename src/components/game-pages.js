@@ -46,7 +46,7 @@ export function GameHomePage() {
 	}, []);
 
 	return (
-		<>
+		<div className="tw:relative tw:min-h-screen">
 			<Background />
 			<div>
 				<div className="tw:bg-gray-700 tw:text-white tw:flex tw:justify-end tw:px-16">
@@ -77,12 +77,14 @@ export function GameHomePage() {
 						</div>
 						<div className="tw:border-4 tw:border-gray-400 tw:relative tw:p-8">
 							<div className="tw:border-black tw:relative tw:h-full">
-								<Link
-									className="tw:absolute tw:w-full tw:h-full"
-									to="/game/new"
-								></Link>
 								<div className="tw:absolute tw:h-full tw:w-1 tw:bg-white tw:left-1/2 tw:-translate-x-1/2"></div>
 								<div className="tw:absolute tw:w-full tw:h-1 tw:bg-white tw:top-1/2 tw:-translate-y-1/2"></div>
+								<Link
+									className="tw:absolute tw:w-full tw:h-full"
+									to={{
+										pathname: "/game/new",
+									}}
+								></Link>
 							</div>
 						</div>
 					</li>
@@ -96,6 +98,7 @@ export function GameHomePage() {
 						searchParams.append("releaseDate", game.releaseDate);
 						searchParams.append("author", game.author);
 						searchParams.append("price", game.price);
+						searchParams.append("image", game.image);
 						return (
 							<li
 								className="tw:grid tw:grid-cols-[auto_1fr] tw:gap-2 tw:bg-gray-700 tw:text-white tw:font-medium tw:text-lg"
@@ -104,9 +107,9 @@ export function GameHomePage() {
 								<div className="tw:col-span-2 tw:bg-black tw:py-2 tw:text-center">
 									{game.name}
 								</div>
-								<div className="tw:col-span-2 tw:bg-black tw:text-white tw:aspect-square tw:mx-4">
+								<div className="tw:col-span-2 tw:bg-black tw:text-white tw:aspect-square tw:mx-4 tw:grid tw:place-items-center tw:overflow-hidden">
 									<img
-										src={game.image}
+										src={`${process.env.REACT_APP_API_URL}/${game.image}`}
 										alt={"image of " + game.name}
 									/>
 								</div>
@@ -134,7 +137,30 @@ export function GameHomePage() {
 									>
 										Game detail
 									</Link>
-									<button className="tw:bg-red-400 tw:text-center tw:py-2 tw:cursor-pointer">
+									<button
+										onClick={() => {
+											axios
+												.delete(
+													`${process.env.REACT_APP_API_URL}/game/delete/${game.id}`,
+													{ withCredentials: true },
+												)
+												.then(() => {
+													alert(
+														"Successfully delete game",
+													);
+													setGames(
+														games.filter(
+															({ id }) =>
+																id !== game.id,
+														),
+													);
+												})
+												.catch((err) => {
+													handleError(err, navigate);
+												});
+										}}
+										className="tw:bg-red-400 tw:text-center tw:py-2 tw:cursor-pointer"
+									>
 										Delete game
 									</button>
 								</div>
@@ -143,7 +169,7 @@ export function GameHomePage() {
 					})}
 				</ul>
 			</div>
-		</>
+		</div>
 	);
 }
 
@@ -154,6 +180,7 @@ export function GameAddPage() {
 		day: "2-digit",
 		year: "numeric",
 	});
+	const [image, setImage] = useState("");
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [releaseDate, setReleaseDate] = useState(null);
@@ -187,10 +214,13 @@ export function GameAddPage() {
 									const gameData = new FormData(
 										e.currentTarget,
 									);
+									console.log(
+										Object.fromEntries(gameData.entries()),
+									);
 									axios
 										.post(
 											`${process.env.REACT_APP_API_URL}/game/new`,
-											Object.fromEntries(gameData),
+											gameData,
 											{ withCredentials: true },
 										)
 										.then(() => {
@@ -251,7 +281,7 @@ export function GameAddPage() {
 								<label>
 									Release date:{" "}
 									<input
-										value={releaseDate}
+										value={releaseDate || ""}
 										onChange={(e) => {
 											setReleaseDate(
 												formatter.format(
@@ -296,6 +326,17 @@ export function GameAddPage() {
 								<label>
 									Image:{" "}
 									<input
+										onChange={(ev) => {
+											const reader = new FileReader();
+											reader.onload = (e) => {
+												setImage(
+													e.currentTarget.result,
+												);
+											};
+											reader.readAsDataURL(
+												ev.currentTarget.files[0],
+											);
+										}}
 										className="tw:px-4 tw:py-1 tw:bg-gray-200 tw:border tw:border-black tw:w-full"
 										type="file"
 										accept="image/*"
@@ -316,14 +357,20 @@ export function GameAddPage() {
 							<div className="tw:col-span-2 tw:bg-black tw:py-2 tw:text-center">
 								{name}
 							</div>
-							<div className="tw:col-span-2 tw:bg-black tw:text-white tw:aspect-square tw:mx-4">
-								<img alt={"image of " + name} />
+							<div className="tw:col-span-2 tw:bg-black tw:text-white tw:aspect-square tw:mx-4 tw:grid tw:place-items-center">
+								<img
+									className="tw:w-full"
+									src={image || null}
+									alt={"image of " + name}
+								/>
 							</div>
 							<div className="tw:pl-4">Description:</div>
 							<div className="tw:pr-4">{description}</div>
 							<div className="tw:pl-4">Release date:</div>
 							<div className="tw:pr-4">
-								{formatter.format(new Date(releaseDate))}
+								{releaseDate
+									? formatter.format(new Date(releaseDate))
+									: ""}
 							</div>
 							<div className="tw:pl-4">Author:</div>
 							<div className="tw:pr-4">{author}</div>
@@ -366,9 +413,16 @@ export function GameDetailPage() {
 							<div className="tw:col-span-2 tw:bg-black tw:py-2 tw:text-center">
 								{searchParams.get("name")}
 							</div>
-							<div className="tw:col-span-2 tw:bg-black tw:text-white tw:aspect-square tw:mx-4">
+							<div className="tw:col-span-2 tw:bg-black tw:text-white tw:aspect-square tw:mx-4 tw:grid tw:place-items-center">
 								<img
-									src={searchParams.get("image")}
+									className="tw:w-full"
+									src={
+										searchParams
+											.get("image")
+											.startsWith("data:image")
+											? searchParams.get("image")
+											: `${process.env.REACT_APP_API_URL}/${searchParams.get("image")}`
+									}
 									alt={"image of " + searchParams.get("name")}
 								/>
 							</div>
@@ -405,7 +459,7 @@ export function GameDetailPage() {
 									axios
 										.patch(
 											`${process.env.REACT_APP_API_URL}/game/update/${gameId}`,
-											Object.fromEntries(gameData),
+											gameData,
 											{ withCredentials: true },
 										)
 										.then(() => {
@@ -546,6 +600,26 @@ export function GameDetailPage() {
 								<label>
 									Image:{" "}
 									<input
+										onChange={(ev) => {
+											const reader = new FileReader();
+											reader.onload = (e) => {
+												const newSearchParams =
+													new URLSearchParams(
+														searchParams,
+													);
+												newSearchParams.set(
+													"image",
+													e.currentTarget.result,
+												);
+												setSearchParams(
+													newSearchParams,
+													{ replace: true },
+												);
+											};
+											reader.readAsDataURL(
+												ev.currentTarget.files[0],
+											);
+										}}
 										className="tw:px-4 tw:py-1 tw:bg-gray-200 tw:border tw:border-black tw:w-full"
 										type="file"
 										accept="image/*"
