@@ -11,6 +11,8 @@
     --tw-color-yellow-400: oklch(85.2% 0.199 91.936);
     --tw-color-green-400: oklch(79.2% 0.209 151.711);
     --tw-color-blue-400: oklch(70.7% 0.165 254.624);
+    --tw-color-gray-50: oklch(98.5% 0.002 247.839);
+    --tw-color-gray-100: oklch(96.7% 0.003 264.542);
     --tw-color-gray-200: oklch(92.8% 0.006 264.531);
     --tw-color-gray-400: oklch(70.7% 0.022 261.325);
     --tw-color-gray-500: oklch(55.1% 0.027 264.364);
@@ -19,9 +21,7 @@
     --tw-color-white: #fff;
     --tw-spacing: 0.25rem;
     --tw-container-lg: 32rem;
-    --tw-container-xl: 36rem;
     --tw-container-2xl: 42rem;
-    --tw-container-3xl: 48rem;
     --tw-text-lg: 1.125rem;
     --tw-text-lg--line-height: calc(1.75 / 1.125);
     --tw-text-xl: 1.25rem;
@@ -30,7 +30,6 @@
     --tw-text-5xl--line-height: 1;
     --tw-font-weight-medium: 500;
     --tw-font-weight-bold: 700;
-    --tw-aspect-video: 16 / 9;
     --tw-default-font-family: var(--tw-font-sans);
     --tw-default-mono-font-family: var(--tw-font-mono);
   }
@@ -250,9 +249,6 @@
   .tw\:max-w-2xl {
     max-width: var(--tw-container-2xl);
   }
-  .tw\:min-w-screen {
-    min-width: 100vw;
-  }
   .tw\:-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -327,8 +323,20 @@
   .tw\:bg-blue-400 {
     background-color: var(--tw-color-blue-400);
   }
+  .tw\:bg-gray-50 {
+    background-color: var(--tw-color-gray-50);
+  }
+  .tw\:bg-gray-100 {
+    background-color: var(--tw-color-gray-100);
+  }
   .tw\:bg-gray-200 {
     background-color: var(--tw-color-gray-200);
+  }
+  .tw\:bg-gray-400 {
+    background-color: var(--tw-color-gray-400);
+  }
+  .tw\:bg-gray-500 {
+    background-color: var(--tw-color-gray-500);
   }
   .tw\:bg-gray-700 {
     background-color: var(--tw-color-gray-700);

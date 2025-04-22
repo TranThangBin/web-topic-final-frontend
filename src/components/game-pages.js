@@ -23,6 +23,14 @@ function handleError(err, navigate) {
 	alert("something went wrong");
 }
 
+function getExpectedId(lastId, categoryShort) {
+	if (!lastId) {
+		return "GAME" + categoryShort + "0001";
+	}
+	const newIdIdx = parseInt(lastId.slice(-4)) + 1;
+	return "GAME" + categoryShort + newIdIdx.toString().padStart(4, "0");
+}
+
 export function GameHomePage() {
 	const navigate = useNavigate();
 	const formatter = Intl.DateTimeFormat("en-CA", {
@@ -83,6 +91,7 @@ export function GameHomePage() {
 									className="tw:absolute tw:w-full tw:h-full"
 									to={{
 										pathname: "/game/new",
+										search: `lastId=${games.at(-1)?.id || ""}`,
 									}}
 								></Link>
 							</div>
@@ -175,19 +184,23 @@ export function GameHomePage() {
 
 export function GameAddPage() {
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const formatter = new Intl.DateTimeFormat("en-CA", {
 		month: "2-digit",
 		day: "2-digit",
 		year: "numeric",
 	});
+	const [expectedId, setExpectedId] = useState("");
 	const [image, setImage] = useState("");
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [releaseDate, setReleaseDate] = useState(null);
 	const [author, setAuthor] = useState("");
 	const [price, setPrice] = useState(0);
-	const categories = process.env.REACT_APP_CATEGORIES_PAIR?.split(",").map(
-		(pair) => pair.split(":").at(0),
+	const categories = new Map(
+		process.env.REACT_APP_CATEGORIES_PAIR?.split(",").map((pair) =>
+			pair.split(":"),
+		),
 	);
 	return (
 		<>
@@ -203,10 +216,19 @@ export function GameAddPage() {
 				</div>
 				<div className="tw:min-h-[calc(100vh-3.75rem)] tw:grid tw:place-items-center">
 					<div className="tw:grid tw:grid-cols-2 tw:gap-4 tw:border-2 tw:p-8 tw:bg-white">
-						<div className="tw:grid tw:items-center">
+						<div className="tw:grid tw:items-center tw:gap-4">
 							<h1 className="tw:font-bold tw:text-center tw:text-5xl">
 								Add game
 							</h1>
+							<label>
+								Expected id:
+								<input
+									value={expectedId}
+									className="tw:px-4 tw:py-1 tw:bg-gray-400 tw:border tw:border-black tw:w-full"
+									type="text"
+									disabled
+								/>
+							</label>
 							<form
 								className="tw:flex tw:flex-col tw:gap-4"
 								onSubmit={(e) => {
@@ -225,7 +247,17 @@ export function GameAddPage() {
 										)
 										.then(() => {
 											alert("Successfully added game!");
-											e.currentTarget.reset();
+											const newSearchParams =
+												new URLSearchParams(
+													searchParams,
+												);
+											newSearchParams.set(
+												"lastId",
+												expectedId,
+											);
+											setSearchParams(newSearchParams, {
+												replace: true,
+											});
 										})
 										.catch((err) => {
 											handleError(err, navigate);
@@ -235,19 +267,31 @@ export function GameAddPage() {
 								<label>
 									Category:{" "}
 									<select
+										onChange={(e) => {
+											setExpectedId(
+												getExpectedId(
+													searchParams.get("lastId"),
+													categories.get(
+														e.currentTarget.value,
+													),
+												),
+											);
+										}}
 										className="tw:px-4 tw:py-1 tw:bg-gray-200 tw:border tw:border-black tw:w-full"
 										name="category"
 										id="category"
 									>
 										<option value=""></option>
-										{categories?.map((category) => (
-											<option
-												key={category}
-												value={category}
-											>
-												{category}
-											</option>
-										))}
+										{Array.from(categories?.keys()).map(
+											(category) => (
+												<option
+													key={category}
+													value={category}
+												>
+													{category}
+												</option>
+											),
+										)}
 									</select>
 								</label>
 								<label>
