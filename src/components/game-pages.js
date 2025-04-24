@@ -39,6 +39,15 @@ export function GameHomePage() {
 		year: "numeric",
 	});
 	const [games, setGames] = useState([]);
+	const [displayedGames, setDisplayedGames] = useState([]);
+	const [category, setCategory] = useState("");
+	const [searchName, setSearchName] = useState("");
+
+	const categories = new Map(
+		process.env.REACT_APP_CATEGORIES_PAIR?.split(",").map((pair) =>
+			pair.split(":"),
+		),
+	);
 
 	useEffect(() => {
 		const url = new URL(`${process.env.REACT_APP_API_URL}/game/all`);
@@ -53,7 +62,22 @@ export function GameHomePage() {
 			.catch((err) => {
 				handleError(err, navigate);
 			});
-	}, []);
+	}, [navigate]);
+
+	useEffect(() => {
+		let newGameList = games;
+		if (category !== "") {
+			newGameList = newGameList.filter((game) =>
+				game.id.includes(category),
+			);
+		}
+		if (searchName !== "") {
+			newGameList = newGameList.filter((game) =>
+				game.name.toLowerCase().includes(searchName.toLowerCase()),
+			);
+		}
+		setDisplayedGames(newGameList);
+	}, [games, category, searchName]);
 
 	return (
 		<div className="tw:relative tw:min-h-screen">
@@ -80,6 +104,49 @@ export function GameHomePage() {
 						Logout
 					</button>
 				</div>
+				<div className="tw:bg-gray-700 tw:text-white tw:flex tw:px-16 tw:py-4 tw:border-t-2 tw:border-t-white tw:gap-4 tw:items-end">
+					<label>
+						Category
+						<select
+							value={category}
+							onChange={(e) => {
+								setCategory(e.currentTarget.value);
+							}}
+							className="tw:px-4 tw:py-1 tw:bg-gray-200 tw:border tw:border-black tw:w-full tw:text-black"
+						>
+							<option value=""></option>
+							{Array.from(categories?.entries()).map(
+								([long, short]) => (
+									<option key={short} value={short}>
+										{long}
+									</option>
+								),
+							)}
+						</select>
+					</label>
+					<label>
+						Search
+						<input
+							onChange={(e) => {
+								setSearchName(e.currentTarget.value);
+							}}
+							value={searchName}
+							className="tw:px-4 tw:py-1 tw:bg-gray-200 tw:border tw:border-black tw:w-full tw:text-black"
+							type="text"
+							name="search"
+							id="search"
+						/>
+					</label>
+					<button
+						onClick={() => {
+							setCategory("");
+							setSearchName("");
+						}}
+						className="tw:border-white tw:border tw:px-3 tw:py-2 tw:cursor-pointer"
+					>
+						Clear filters
+					</button>
+				</div>
 				<ul className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] tw:m-4 tw:gap-4">
 					<li className="tw:font-medium tw:grid-rows-[auto_1fr] tw:grid tw:min-h-96 tw:bg-gray-700">
 						<div className="tw:bg-black tw:py-2 tw:text-center tw:text-white">
@@ -99,7 +166,7 @@ export function GameHomePage() {
 							</div>
 						</div>
 					</li>
-					{games.map((game) => {
+					{displayedGames.map((game) => {
 						const searchParams = new URLSearchParams();
 						searchParams.append("name", game.name);
 						searchParams.append(
@@ -178,46 +245,48 @@ export function GameHomePage() {
 							</li>
 						);
 					})}
-					<li className="tw:font-medium tw:grid-rows-[auto_1fr] tw:grid tw:min-h-96 tw:bg-gray-700">
-						<div className="tw:bg-black tw:py-2 tw:text-center tw:text-white">
-							Load more
-						</div>
-						<div className="tw:border-4 tw:border-gray-400 tw:relative tw:p-8">
-							<div className="tw:border-black tw:relative tw:h-full">
-								<div className="tw:absolute tw:top-1/2 tw:left-1/2 tw:-translate-1/2 tw:flex tw:gap-10">
-									<div className="tw:w-10 tw:aspect-square tw:bg-white tw:rounded-full"></div>
-									<div className="tw:w-10 tw:aspect-square tw:bg-white tw:rounded-full"></div>
-									<div className="tw:w-10 tw:aspect-square tw:bg-white tw:rounded-full"></div>
-								</div>
-								<button
-									onClick={() => {
-										const url = new URL(
-											`${process.env.REACT_APP_API_URL}/game/all`,
-										);
-										url.searchParams.set("limit", 10);
-										url.searchParams.set(
-											"skip",
-											games.length,
-										);
-										axios
-											.get(url, {
-												withCredentials: true,
-											})
-											.then((res) => {
-												setGames([
-													...games,
-													...res.data,
-												]);
-											})
-											.catch((err) => {
-												handleError(err, navigate);
-											});
-									}}
-									className="tw:absolute tw:w-full tw:h-full tw:cursor-pointer"
-								></button>
+					{searchName === "" && category === "" && (
+						<li className="tw:font-medium tw:grid-rows-[auto_1fr] tw:grid tw:min-h-96 tw:bg-gray-700">
+							<div className="tw:bg-black tw:py-2 tw:text-center tw:text-white">
+								Load more
 							</div>
-						</div>
-					</li>
+							<div className="tw:border-4 tw:border-gray-400 tw:relative tw:p-8">
+								<div className="tw:border-black tw:relative tw:h-full">
+									<div className="tw:absolute tw:top-1/2 tw:left-1/2 tw:-translate-1/2 tw:flex tw:gap-10">
+										<div className="tw:w-10 tw:aspect-square tw:bg-white tw:rounded-full"></div>
+										<div className="tw:w-10 tw:aspect-square tw:bg-white tw:rounded-full"></div>
+										<div className="tw:w-10 tw:aspect-square tw:bg-white tw:rounded-full"></div>
+									</div>
+									<button
+										onClick={() => {
+											const url = new URL(
+												`${process.env.REACT_APP_API_URL}/game/all`,
+											);
+											url.searchParams.set("limit", 10);
+											url.searchParams.set(
+												"skip",
+												games.length,
+											);
+											axios
+												.get(url, {
+													withCredentials: true,
+												})
+												.then((res) => {
+													setGames([
+														...games,
+														...res.data,
+													]);
+												})
+												.catch((err) => {
+													handleError(err, navigate);
+												});
+										}}
+										className="tw:absolute tw:w-full tw:h-full tw:cursor-pointer"
+									></button>
+								</div>
+							</div>
+						</li>
+					)}
 				</ul>
 			</div>
 		</div>
