@@ -210,12 +210,6 @@
   .tw\:-z-10 {
     z-index: calc(10 * -1);
   }
-  .tw\:z-10 {
-    z-index: 10;
-  }
-  .tw\:z-20 {
-    z-index: 20;
-  }
   .tw\:col-span-2 {
     grid-column: span 2 / span 2;
   }
@@ -383,17 +377,11 @@
   .tw\:bg-gray-400 {
     background-color: var(--tw-color-gray-400);
   }
-  .tw\:bg-gray-500 {
-    background-color: var(--tw-color-gray-500);
-  }
   .tw\:bg-gray-600 {
     background-color: var(--tw-color-gray-600);
   }
   .tw\:bg-gray-700 {
     background-color: var(--tw-color-gray-700);
-  }
-  .tw\:bg-gray-800 {
-    background-color: var(--tw-color-gray-800);
   }
   .tw\:bg-green-400 {
     background-color: var(--tw-color-green-400);
@@ -452,14 +440,6 @@
   .tw\:text-2xl {
     font-size: var(--tw-text-2xl);
     line-height: var(--tw-leading, var(--tw-text-2xl--line-height));
-  }
-  .tw\:text-3xl {
-    font-size: var(--tw-text-3xl);
-    line-height: var(--tw-leading, var(--tw-text-3xl--line-height));
-  }
-  .tw\:text-4xl {
-    font-size: var(--tw-text-4xl);
-    line-height: var(--tw-leading, var(--tw-text-4xl--line-height));
   }
   .tw\:text-5xl {
     font-size: var(--tw-text-5xl);
