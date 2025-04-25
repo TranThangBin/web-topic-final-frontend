@@ -594,7 +594,7 @@ export function GameAddPage() {
 									)
 									.then(() => {
 										alert("Successfully added game!");
-										setExpectedId("");
+										setCategory("");
 										setImage("");
 										setName("");
 										setDescription("");
