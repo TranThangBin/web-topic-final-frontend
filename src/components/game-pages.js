@@ -367,7 +367,7 @@ export function GameAddPage() {
 			return;
 		}
 		const url = new URL(`${process.env.REACT_APP_API_URL}/game/newId`);
-		url.searchParams.append("category", e.currentTarget.value);
+		url.searchParams.append("category", category);
 		axios
 			.get(url, {
 				withCredentials: true,
