@@ -344,6 +344,7 @@ export function GameAddPage() {
 		year: "numeric",
 	});
 	const [expectedId, setExpectedId] = useState("");
+	const [category, setCategory] = useState("");
 	const [image, setImage] = useState("");
 	const [imageFile, setImageFile] = useState("");
 	const [name, setName] = useState("");
@@ -360,6 +361,27 @@ export function GameAddPage() {
 			pair.split(":"),
 		),
 	);
+	useEffect(() => {
+		if (category === "") {
+			setExpectedId("");
+			return;
+		}
+		const url = new URL(`${process.env.REACT_APP_API_URL}/game/newId`);
+		url.searchParams.append("category", e.currentTarget.value);
+		axios
+			.get(url, {
+				withCredentials: true,
+			})
+			.then((res) => {
+				setExpectedId(res.data.id);
+			})
+			.catch((err) => {
+				console.error(err);
+				alert(
+					"something went wrong when retrieving id from the server",
+				);
+			});
+	}, [category]);
 	return (
 		<>
 			<Background />
@@ -400,27 +422,9 @@ export function GameAddPage() {
 								<label>
 									Category:{" "}
 									<select
+										value={category}
 										onChange={(e) => {
-											const url = new URL(
-												`${process.env.REACT_APP_API_URL}/game/newId`,
-											);
-											url.searchParams.append(
-												"category",
-												e.currentTarget.value,
-											);
-											axios
-												.get(url, {
-													withCredentials: true,
-												})
-												.then((res) => {
-													setExpectedId(res.data.id);
-												})
-												.catch((err) => {
-													console.error(err);
-													alert(
-														"something went wrong when retrieving id from the server",
-													);
-												});
+											setCategory(e.currentTarget.value);
 										}}
 										className="tw:px-4 tw:py-1 tw:bg-gray-200 tw:border tw:border-black tw:w-full"
 										name="category"
